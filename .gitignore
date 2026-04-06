@@ -23,3 +23,6 @@ DataSentinel_Models/
 results/
 *.safetensors
 *.pt
+!results/table*
+!results/game_*
+!results/enhanced_semantic
