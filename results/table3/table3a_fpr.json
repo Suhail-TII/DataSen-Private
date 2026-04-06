@@ -1,0 +1,65 @@
+{
+  "evd": {
+    "duplicate_sentence_detection": 0.22,
+    "grammar_correction": 0.25,
+    "spam_detection": 0.67,
+    "natural_language_inference": 0.11,
+    "sentiment_analysis": 0.1,
+    "hate_detection": 0.15,
+    "summarization": 0.0
+  },
+  "nllmd": {
+    "duplicate_sentence_detection": 1.0,
+    "grammar_correction": 1.0,
+    "spam_detection": 1.0,
+    "natural_language_inference": 1.0,
+    "sentiment_analysis": 1.0,
+    "hate_detection": 1.0,
+    "summarization": 1.0
+  },
+  "ssftd": {
+    "duplicate_sentence_detection": 0.96,
+    "grammar_correction": 0.88,
+    "spam_detection": 0.63,
+    "natural_language_inference": 0.92,
+    "sentiment_analysis": 0.94,
+    "hate_detection": 0.72,
+    "summarization": 0.99
+  },
+  "ssftd_g": {
+    "duplicate_sentence_detection": 0.05,
+    "grammar_correction": 0.0,
+    "spam_detection": 0.42,
+    "natural_language_inference": 0.07,
+    "sentiment_analysis": 0.02,
+    "hate_detection": 0.0,
+    "summarization": 0.02
+  },
+  "kad": {
+    "duplicate_sentence_detection": 1.0,
+    "grammar_correction": 0.96,
+    "spam_detection": 0.91,
+    "natural_language_inference": 0.98,
+    "sentiment_analysis": 0.96,
+    "hate_detection": 0.93,
+    "summarization": 0.98
+  },
+  "promptguard": {
+    "duplicate_sentence_detection": 0.88,
+    "grammar_correction": 1.0,
+    "spam_detection": 0.78,
+    "natural_language_inference": 0.69,
+    "sentiment_analysis": 0.99,
+    "hate_detection": 0.93,
+    "summarization": 0.98
+  },
+  "datasentinel": {
+    "duplicate_sentence_detection": 0.0,
+    "grammar_correction": 0.0,
+    "spam_detection": 0.0,
+    "natural_language_inference": 0.0,
+    "sentiment_analysis": 0.01,
+    "hate_detection": 0.0,
+    "summarization": 0.0
+  }
+}

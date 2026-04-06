@@ -1,0 +1,126 @@
+{
+  "4a": {
+    "Mistral-7B": {
+      "fpr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.01,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.004285714285714286,
+        "Summarization": 0.0
+      }
+    },
+    "LLaMA2-7B": {
+      "fpr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.14,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "LLaMA3-8B-Instruct": {
+      "fpr": {
+        "Dup. sentence detection": 0.74,
+        "Grammar correction": 0.03,
+        "Hate detection": 0.17,
+        "Nat. lang. inference": 0.57,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.57,
+        "Summarization": 0.04
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    }
+  },
+  "4b": {
+    "Mistral-7B": {
+      "fpr": {
+        "Dup. sentence detection": 1.0,
+        "Grammar correction": 0.64,
+        "Hate detection": 0.87,
+        "Nat. lang. inference": 1.0,
+        "Sentiment analysis": 0.29,
+        "Spam detection": 0.67,
+        "Summarization": 0.8
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "LLaMA2-7B": {
+      "fpr": {
+        "Dup. sentence detection": 1.0,
+        "Grammar correction": 1.0,
+        "Hate detection": 1.0,
+        "Nat. lang. inference": 1.0,
+        "Sentiment analysis": 1.0,
+        "Spam detection": 1.0,
+        "Summarization": 1.0
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "LLaMA3-8B-Instruct": {
+      "fpr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.01,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      },
+      "fnr": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.004285714285714286,
+        "Summarization": 0.0
+      }
+    }
+  }
+}

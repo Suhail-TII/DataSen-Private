@@ -1,0 +1,65 @@
+{
+  "evd": {
+    "duplicate_sentence_detection": 0.15714285714285717,
+    "grammar_correction": 0.1542857142857143,
+    "spam_detection": 0.1542857142857143,
+    "natural_language_inference": 0.16999999999999998,
+    "sentiment_analysis": 0.16,
+    "hate_detection": 0.17142857142857146,
+    "summarization": 0.14142857142857143
+  },
+  "nllmd": {
+    "duplicate_sentence_detection": 0.0,
+    "grammar_correction": 0.0014285714285714299,
+    "spam_detection": 0.0014285714285714299,
+    "natural_language_inference": 0.0,
+    "sentiment_analysis": 0.0,
+    "hate_detection": 0.0,
+    "summarization": 0.0
+  },
+  "ssftd": {
+    "duplicate_sentence_detection": 0.08285714285714287,
+    "grammar_correction": 0.14857142857142858,
+    "spam_detection": 0.15571428571428572,
+    "natural_language_inference": 0.17285714285714285,
+    "sentiment_analysis": 0.10857142857142857,
+    "hate_detection": 0.1157142857142857,
+    "summarization": 0.0885714285714286
+  },
+  "ssftd_g": {
+    "duplicate_sentence_detection": 0.42428571428571427,
+    "grammar_correction": 0.64,
+    "spam_detection": 0.40571428571428575,
+    "natural_language_inference": 0.24142857142857146,
+    "sentiment_analysis": 0.31,
+    "hate_detection": 0.4114285714285714,
+    "summarization": 0.6428571428571429
+  },
+  "kad": {
+    "duplicate_sentence_detection": 0.010000000000000009,
+    "grammar_correction": 0.0057142857142857195,
+    "spam_detection": 0.017142857142857144,
+    "natural_language_inference": 0.0014285714285714299,
+    "sentiment_analysis": 0.004285714285714289,
+    "hate_detection": 0.01857142857142859,
+    "summarization": 0.00714285714285715
+  },
+  "promptguard": {
+    "duplicate_sentence_detection": 0.0,
+    "grammar_correction": 0.0,
+    "spam_detection": 0.0,
+    "natural_language_inference": 0.0,
+    "sentiment_analysis": 0.0,
+    "hate_detection": 0.0,
+    "summarization": 0.0
+  },
+  "datasentinel": {
+    "duplicate_sentence_detection": 0.0,
+    "grammar_correction": 0.0,
+    "spam_detection": 0.020000000000000018,
+    "natural_language_inference": 0.0,
+    "sentiment_analysis": 0.0,
+    "hate_detection": 0.0,
+    "summarization": 0.0
+  }
+}

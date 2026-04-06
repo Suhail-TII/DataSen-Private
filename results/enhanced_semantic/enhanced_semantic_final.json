@@ -1,0 +1,42 @@
+{
+  "config": {
+    "ckpt_detector": "DataSentinel_Models/detector_large/checkpoint-5000/",
+    "detection_model": "mistralai/Mistral-7B-v0.1",
+    "paraphrase_model": "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "repo_dir": ".",
+    "data_num": 100,
+    "num_llm_paraphrases": 20,
+    "per_sample": false,
+    "per_sample_paraphrases": 5,
+    "device": "cuda",
+    "save_dir": "results/enhanced_semantic",
+    "skip_template": false,
+    "skip_baseline": false
+  },
+  "results": {
+    "baseline": {
+      "Dup. sentence detection": 0.0,
+      "Grammar correction": 0.0,
+      "Spam detection": 0.0,
+      "Nat. lang. inference": 0.0,
+      "Hate detection": 0.0,
+      "Summarization": 0.0
+    },
+    "template": {
+      "Dup. sentence detection": 0.06,
+      "Grammar correction": 0.95,
+      "Spam detection": 0.0,
+      "Nat. lang. inference": 0.0,
+      "Hate detection": 0.86,
+      "Summarization": 0.41
+    },
+    "llm_global": {
+      "Dup. sentence detection": 1.0,
+      "Grammar correction": 0.99,
+      "Spam detection": 0.95,
+      "Nat. lang. inference": 1.0,
+      "Hate detection": 0.98,
+      "Summarization": 0.86
+    }
+  }
+}

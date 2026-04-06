@@ -1,0 +1,116 @@
+{
+  "KAD": {
+    "heuristic_i": {
+      "avg": 0.0214,
+      "per_task": {
+        "Dup. sentence detection": 0.06,
+        "Grammar correction": 0.01,
+        "Hate detection": 0.01,
+        "Nat. lang. inference": 0.05,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.01,
+        "Summarization": 0.01
+      }
+    },
+    "heuristic_ii": {
+      "avg": 0.5171,
+      "per_task": {
+        "Dup. sentence detection": 0.17,
+        "Grammar correction": 0.42,
+        "Hate detection": 0.8,
+        "Nat. lang. inference": 0.48,
+        "Sentiment analysis": 0.69,
+        "Spam detection": 0.66,
+        "Summarization": 0.4
+      }
+    },
+    "opt_based": {
+      "avg": 0.3357,
+      "per_task": {
+        "Dup. sentence detection": 0.33,
+        "Grammar correction": 0.27,
+        "Hate detection": 0.32,
+        "Nat. lang. inference": 0.46,
+        "Sentiment analysis": 0.28,
+        "Spam detection": 0.35,
+        "Summarization": 0.34
+      }
+    }
+  },
+  "Min": {
+    "heuristic_i": {
+      "avg": 0.0,
+      "per_task": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "heuristic_ii": {
+      "avg": 0.0,
+      "per_task": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "opt_based": {
+      "avg": 0.0029,
+      "per_task": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.02,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    }
+  },
+  "Minimax": {
+    "heuristic_i": {
+      "avg": 0.0,
+      "per_task": {
+        "Dup. sentence detection": 0.0,
+        "Grammar correction": 0.0,
+        "Hate detection": 0.0,
+        "Nat. lang. inference": 0.0,
+        "Sentiment analysis": 0.0,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "heuristic_ii": {
+      "avg": 0.0157,
+      "per_task": {
+        "Dup. sentence detection": 0.01,
+        "Grammar correction": 0.02,
+        "Hate detection": 0.01,
+        "Nat. lang. inference": 0.01,
+        "Sentiment analysis": 0.06,
+        "Spam detection": 0.0,
+        "Summarization": 0.0
+      }
+    },
+    "opt_based": {
+      "avg": 0.5929,
+      "per_task": {
+        "Dup. sentence detection": 0.48,
+        "Grammar correction": 0.74,
+        "Hate detection": 0.7,
+        "Nat. lang. inference": 0.35,
+        "Sentiment analysis": 0.69,
+        "Spam detection": 0.62,
+        "Summarization": 0.57
+      }
+    }
+  }
+}

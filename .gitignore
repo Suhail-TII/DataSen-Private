@@ -20,7 +20,7 @@ form_builder.py
 *.lock
 7_1000_naive_minimax_mistral_3_1_backend_llama3_revise_beta_1_balance_finetune/
 DataSentinel_Models/
-results/
+results/*
 *.safetensors
 *.pt
 !results/table*

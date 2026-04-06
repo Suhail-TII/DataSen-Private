@@ -1,0 +1,36 @@
+
+================================================================================
+TABLE 4(a): FPR and FNR — Backend=LLaMA3-8B-Instruct, vary Detection LLM
+================================================================================
+                              Mistral-7B      LLaMA2-7B     LLaMA3-8B-Instruct
+Injected Task               FPR    FNR  FPR    FNR  FPR    FNR
+--------------------------------------------------------------------------------
+Dup. sentence detection        0.00   0.00   0.00   0.00   0.74   0.00
+Grammar correction             0.00   0.00   0.00   0.00   0.03   0.00
+Hate detection                 0.00   0.00   0.00   0.00   0.17   0.00
+Nat. lang. inference           0.00   0.00   0.14   0.00   0.57   0.00
+Sentiment analysis             0.01   0.00   0.00   0.00   0.00   0.00
+Spam detection                 0.00   0.00   0.00   0.00   0.57   0.00
+Summarization                  0.00   0.00   0.00   0.00   0.04   0.00
+--------------------------------------------------------------------------------
+Average                        0.00   0.00   0.02   0.00   0.30   0.00
+
+Expected (from paper): All FPR=0.00, FNR≤0.03
+
+================================================================================
+TABLE 4(b): FPR and FNR — Detection=Mistral-7B, vary Backend LLM
+================================================================================
+                              Mistral-7B      LLaMA2-7B     LLaMA3-8B-Instruct
+Injected Task               FPR    FNR  FPR    FNR  FPR    FNR
+--------------------------------------------------------------------------------
+Dup. sentence detection        1.00   0.00   1.00   0.00   0.00   0.00
+Grammar correction             0.64   0.00   1.00   0.00   0.00   0.00
+Hate detection                 0.87   0.00   1.00   0.00   0.00   0.00
+Nat. lang. inference           1.00   0.00   1.00   0.00   0.00   0.00
+Sentiment analysis             0.29   0.00   1.00   0.00   0.01   0.00
+Spam detection                 0.67   0.00   1.00   0.00   0.00   0.00
+Summarization                  0.80   0.00   1.00   0.00   0.00   0.00
+--------------------------------------------------------------------------------
+Average                        0.75   0.00   1.00   0.00   0.00   0.00
+
+Expected (from paper): All FPR=0.00, FNR≤0.03

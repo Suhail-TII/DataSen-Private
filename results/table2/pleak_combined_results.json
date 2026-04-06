@@ -1,0 +1,9 @@
+{
+  "duplicate_sentence_detection": 0.0,
+  "grammar_correction": 0.0,
+  "spam_detection": 0.0,
+  "natural_language_inference": 0.0,
+  "sentiment_analysis": 0.0,
+  "hate_detection": 0.0,
+  "summarization": 0.0
+}

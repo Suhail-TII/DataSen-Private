@@ -1,0 +1,7 @@
+TABLE 5: FNR of DataSentinel (third-party provider scenario)
+==================================================
+OpenChat: FNR=0.0000  (paper=0.0)
+Mistral-7B: FNR=0.0000  (paper=0.0)
+LLaMA-3.1-8B-Instruct: FNR=0.0002  (paper=0.01)
+
+Mixtral-8x7B: skipped (hardware constraint)
