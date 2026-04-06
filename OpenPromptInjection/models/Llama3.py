@@ -47,9 +47,9 @@ class Llama3(Model):
 
     def formatting_func(self, example):
         if isinstance(example, dict):
-            input_split = example['input'].split('\nText: ')
+            input_split = example['input'].split('\nText: ', 1)
         elif isinstance(example, str):
-            input_split = example.split('\nText: ')
+            input_split = example.split('\nText: ', 1)
         else:
             raise ValueError(f'{type(example)} is not supported for querying Mistral')
         assert (len(input_split) == 2)
@@ -92,9 +92,9 @@ class Llama3(Model):
     def backend_query(self, msg):
         if '\nText: ' in msg or (isinstance(msg, dict) and '\nText: ' in msg['input']):
             if isinstance(msg, dict):
-                input_split = msg['input'].split('\nText: ')
+                input_split = msg['input'].split('\nText: ', 1)
             elif isinstance(msg, str):
-                input_split = msg.split('\nText: ')
+                input_split = msg.split('\nText: ', 1)
             else:
                 raise ValueError(f'{type(msg)} is not supported for querying Mistral')
             assert (len(input_split) == 2)

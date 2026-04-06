@@ -29,6 +29,8 @@ def create_model(config):
         model = Flan(config)
     elif provider == 'internlm':
         model = Internlm(config)
+    elif provider == 'llama3':
+        model = Llama3(config)
     elif provider == 'deepseek':
         if 'distill' in model_name or 'Distill' in model_name:
             if 'llama' in model_name.lower():
