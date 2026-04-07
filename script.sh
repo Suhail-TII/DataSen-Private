@@ -131,3 +131,11 @@ python table1_pl.py \
 #     --repo_dir . \
 #     --data_num 100 \
 #     --save_dir results/game_theoretic_attacks 2>&1 | tee results/game_theoretic_attacks.log
+
+# python gt_semantic_attack.py \
+#     --ckpt_detector DataSentinel_Models/detector_large/checkpoint-5000/ \
+#     --paraphrase_model meta-llama/Meta-Llama-3-8B-Instruct \
+#     --repo_dir . --data_num 100 \
+#     --num_paraphrases 20 --mw_rounds 100 --mw_eta 0.3 \
+#     --ablation \
+#     --save_dir results/gt_semantic
