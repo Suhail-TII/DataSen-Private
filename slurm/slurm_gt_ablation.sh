@@ -87,6 +87,7 @@ DATA_NUM=${DATA_NUM:-100}
 NUM_PARAPHRASES=${NUM_PARAPHRASES:-20}
 MW_ROUNDS=${MW_ROUNDS:-100}
 MW_ETA=${MW_ETA:-0.3}
+SEEDS=${SEEDS:-42,43,44}
 PARAPHRASE_MODEL=${PARAPHRASE_MODEL:-meta-llama/Meta-Llama-3.1-8B-Instruct}
 REPO_DIR=${REPO_DIR:-.}
 
@@ -99,6 +100,7 @@ CMD="$CMD --data_num $DATA_NUM"
 CMD="$CMD --num_paraphrases $NUM_PARAPHRASES"
 CMD="$CMD --mw_rounds $MW_ROUNDS"
 CMD="$CMD --mw_eta $MW_ETA"
+CMD="$CMD --seeds $SEEDS"
 CMD="$CMD --groups $GROUP"
 CMD="$CMD --save_dir $RUN_DIR"
 CMD="$CMD --resume"     # always resume from checkpoint if one exists

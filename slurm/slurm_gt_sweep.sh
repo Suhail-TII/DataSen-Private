@@ -89,6 +89,7 @@ K_VALUES=${K_VALUES:-5,10,20,30,50}
 T_FIXED=${T_FIXED:-100}
 ETA_FIXED=${ETA_FIXED:-0.3}
 NUM_PARA_FIXED=${NUM_PARA_FIXED:-20}
+SEEDS=${SEEDS:-42,43,44}
 
 # ── Build command ─────────────────────────────────────────────────────────────
 CMD="python gt_semantic_sweep.py"
@@ -103,6 +104,7 @@ CMD="$CMD --K_values $K_VALUES"
 CMD="$CMD --T_fixed $T_FIXED"
 CMD="$CMD --eta_fixed $ETA_FIXED"
 CMD="$CMD --num_paraphrases_fixed $NUM_PARA_FIXED"
+CMD="$CMD --seeds $SEEDS"
 CMD="$CMD --save_dir $RUN_DIR"
 CMD="$CMD --resume"
 

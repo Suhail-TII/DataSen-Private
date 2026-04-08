@@ -73,6 +73,25 @@ from collections import defaultdict
 import torch
 
 
+# ── Reproducibility ───────────────────────────────────────────────────────────
+
+def set_seed(seed: int):
+    """
+    Set all relevant random seeds for reproducibility.
+    
+    Note: Even with all seeds set, exact reproducibility across different
+    GPU types or CUDA versions is not guaranteed due to non-deterministic
+    GPU kernels. For strict reproducibility on the same hardware, this is
+    sufficient. For cross-hardware reproducibility, additional torch flags
+    would be needed (with significant performance cost).
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 SECRET_KEY = "DGDSGNH"
@@ -690,7 +709,12 @@ def main():
     parser.add_argument("--skip_baseline", action="store_true")
     parser.add_argument("--ablation", action="store_true",
                         help="Also run with NOVEL_SEPARATORS as ablation study")
+    parser.add_argument("--seed", type=int, default=42,
+                        help="Random seed for reproducibility")
     args = parser.parse_args()
+    
+    # Set seed for reproducibility
+    set_seed(args.seed)
     
     os.makedirs(args.save_dir, exist_ok=True)
     
@@ -701,6 +725,7 @@ def main():
     print(f"Main result: DataSentinel's own separators (Table 10 + Table 7)")
     if args.ablation:
         print(f"Ablation: Novel separators (robustness check)")
+    print(f"Seed: {args.seed}")
     print("=" * 70)
     
     # Load data
@@ -834,6 +859,7 @@ def main():
     # Save final
     final = {
         "config": {
+            "seed": args.seed,
             "num_paraphrases": args.num_paraphrases,
             "mw_rounds": args.mw_rounds,
             "mw_eta": args.mw_eta,

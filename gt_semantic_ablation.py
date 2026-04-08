@@ -85,6 +85,7 @@ from gt_semantic_attack import (
     # Data classes
     Strategy, MWState,
     # Functions
+    set_seed,
     setup_repo, load_all_tasks, load_detector, load_paraphrase_model,
     generate_paraphrase_pool, build_strategy_pool, apply_strategy,
     multiplicative_weights_learn, exploit_learned_strategy,
@@ -114,14 +115,29 @@ class CheckpointManager:
         self._header_written = self.csv_path.exists()
     
     def get_completed_tasks(self) -> Set[str]:
-        """Return set of target_task names already completed."""
+        """
+        Return set of (target_task, seed) tuples already completed, encoded
+        as composite strings 'task_name__seed{N}' for backward-compatible
+        membership tests.
+        
+        If 'seed' column is missing (old checkpoints), falls back to just
+        target_task names.
+        """
         if not self.csv_path.exists():
             return set()
         try:
             df = pd.read_csv(self.csv_path)
             if 'target_task' not in df.columns:
                 return set()
-            return set(df['target_task'].unique().tolist())
+            if 'seed' in df.columns:
+                # Build composite keys: 'task__seed42'
+                return set(
+                    f"{r['target_task']}__seed{int(r['seed'])}"
+                    for _, r in df[['target_task', 'seed']].iterrows()
+                )
+            else:
+                # Backward compat: just task names
+                return set(df['target_task'].unique().tolist())
         except Exception as e:
             print(f"  [Checkpoint] Could not read {self.csv_path}: {e}")
             return set()
@@ -615,6 +631,9 @@ def main():
                         help="Comma-separated condition codes (e.g., C1,C4,A2,A4)")
     parser.add_argument("--transfer_source", type=str, default="mrpc",
                         help="Source dataset for G3 cross-task transfer")
+    parser.add_argument("--seeds", type=str, default="42",
+                        help="Comma-separated list of seeds to run each condition with. "
+                             "Use multiple seeds (e.g. '42,43,44') for mean±std reporting.")
     parser.add_argument("--resume", action="store_true",
                         help="Resume from existing checkpoints")
     args = parser.parse_args()
@@ -624,6 +643,7 @@ def main():
     
     groups_to_run = [g.strip() for g in args.groups.split(",")]
     conditions_filter = set([c.strip() for c in args.conditions.split(",") if c.strip()])
+    seeds = [int(s.strip()) for s in args.seeds.split(",")]
     
     print("=" * 75)
     print("GT-SEMANTIC ATTACK — ABLATION STUDY")
@@ -631,6 +651,7 @@ def main():
     print(f"  Groups       : {groups_to_run}")
     if conditions_filter:
         print(f"  Conditions   : {conditions_filter}")
+    print(f"  Seeds        : {seeds}")
     print(f"  Detector     : {args.ckpt_detector}")
     print(f"  Paraphraser  : {args.paraphrase_model}")
     print(f"  data_num     : {args.data_num}")
@@ -661,6 +682,7 @@ def main():
     if "1" in groups_to_run:
         print("\n" + "=" * 75)
         print("GROUP 1 — COMPONENT ISOLATION")
+        print(f"  Running {len(seeds)} seed(s): {seeds}")
         print("=" * 75)
         
         g1_conditions = [
@@ -669,6 +691,9 @@ def main():
             ("C3_mw_single_paraphrase", run_C3_mw_single_paraphrase),
             ("C4_mw_phi_llm",         run_C4_mw_phi_llm),
         ]
+        
+        # C1 is deterministic (no MW, no LLM sampling) — only run once with seeds[0]
+        DETERMINISTIC_CONDITIONS = {"C1_published_baseline"}
         
         for cond_name, cond_fn in g1_conditions:
             cond_code = cond_name.split("_")[0]  # C1, C2, etc.
@@ -680,52 +705,70 @@ def main():
             
             print(f"\n[G1] {cond_name}")
             if done:
-                print(f"  Resuming, {len(done)} tasks already complete")
+                print(f"  Resuming, {len(done)} (task,seed) entries already complete")
             
-            for dataset in target_datasets:
-                task_name = DATASET_TO_TASK_NAME[dataset]
-                if task_name in done:
-                    print(f"  ⊙ {task_name} (skipped — checkpoint)")
-                    continue
+            # Determine which seeds to run for this condition
+            if cond_name in DETERMINISTIC_CONDITIONS:
+                seeds_for_cond = [seeds[0]]
+                if len(seeds) > 1:
+                    print(f"  (deterministic — only running seed={seeds[0]})")
+            else:
+                seeds_for_cond = seeds
+            
+            for seed in seeds_for_cond:
+                set_seed(seed)
                 
-                target_task = target_tasks[dataset]
-                
-                try:
-                    if cond_name == "C1_published_baseline":
-                        row = run_C1_published_baseline(
-                            detector, target_task, dataset,
-                            inject_instr, inject_data_0, args.data_num,
-                        )
-                    elif cond_name == "C2_mw_original_only":
-                        row = run_C2_mw_original_only(
-                            detector, target_task, dataset,
-                            inject_instr, inject_data_0,
-                            args.mw_rounds, args.mw_eta, args.data_num,
-                        )
-                    elif cond_name == "C3_mw_single_paraphrase":
-                        row = run_C3_mw_single_paraphrase(
-                            detector, target_task, dataset,
-                            inject_instr, inject_data_0,
-                            args.mw_rounds, args.mw_eta, args.data_num,
-                        )
-                    elif cond_name == "C4_mw_phi_llm":
-                        row = run_C4_mw_phi_llm(
-                            detector, para_model, para_tok, args.device,
-                            target_task, dataset,
-                            inject_instr, inject_data_0,
-                            args.num_paraphrases, args.mw_rounds, args.mw_eta, args.data_num,
-                        )
+                for dataset in target_datasets:
+                    task_name = DATASET_TO_TASK_NAME[dataset]
+                    done_key = f"{task_name}__seed{seed}"
+                    if done_key in done:
+                        print(f"  ⊙ {task_name} seed={seed} (skipped — checkpoint)")
+                        continue
                     
-                    print(f"  ✓ {task_name}: FNR={row['fnr']:.4f}, queries={row['queries']}")
-                    ckpt.save_row(row)
-                except Exception as e:
-                    print(f"  ✗ {task_name}: FAILED — {e}")
-                    import traceback; traceback.print_exc()
+                    target_task = target_tasks[dataset]
+                    
+                    try:
+                        if cond_name == "C1_published_baseline":
+                            row = run_C1_published_baseline(
+                                detector, target_task, dataset,
+                                inject_instr, inject_data_0, args.data_num,
+                            )
+                        elif cond_name == "C2_mw_original_only":
+                            row = run_C2_mw_original_only(
+                                detector, target_task, dataset,
+                                inject_instr, inject_data_0,
+                                args.mw_rounds, args.mw_eta, args.data_num,
+                            )
+                        elif cond_name == "C3_mw_single_paraphrase":
+                            row = run_C3_mw_single_paraphrase(
+                                detector, target_task, dataset,
+                                inject_instr, inject_data_0,
+                                args.mw_rounds, args.mw_eta, args.data_num,
+                            )
+                        elif cond_name == "C4_mw_phi_llm":
+                            row = run_C4_mw_phi_llm(
+                                detector, para_model, para_tok, args.device,
+                                target_task, dataset,
+                                inject_instr, inject_data_0,
+                                args.num_paraphrases, args.mw_rounds, args.mw_eta, args.data_num,
+                            )
+                        
+                        # Tag with seed and use composite key for resume
+                        row["seed"] = seed
+                        row["true_target_task"] = task_name
+                        row["target_task"] = done_key
+                        
+                        print(f"  ✓ {task_name} seed={seed}: FNR={row['fnr']:.4f}, queries={row['queries']}")
+                        ckpt.save_row(row)
+                    except Exception as e:
+                        print(f"  ✗ {task_name} seed={seed}: FAILED — {e}")
+                        import traceback; traceback.print_exc()
     
     # ── GROUP 2: Algorithm comparison ───────────────────────────────────────
     if "2" in groups_to_run:
         print("\n" + "=" * 75)
         print("GROUP 2 — ALGORITHM COMPARISON")
+        print(f"  Running {len(seeds)} seed(s): {seeds}")
         print("=" * 75)
         
         # Group 2 saves to one checkpoint per algorithm so we can resume
@@ -734,38 +777,47 @@ def main():
         done_per_algo = {a: (ckpts[a].get_completed_tasks() if args.resume else set())
                           for a in algo_codes}
         
-        for dataset in target_datasets:
-            task_name = DATASET_TO_TASK_NAME[dataset]
+        for seed in seeds:
+            set_seed(seed)
+            print(f"\n[G2] === seed={seed} ===")
             
-            # Skip task if all 4 algorithms already done
-            if all(task_name in done_per_algo[a] for a in algo_codes):
-                print(f"\n[G2] {task_name}: all algorithms already complete (skipped)")
-                continue
-            
-            print(f"\n[G2] {task_name}")
-            target_task = target_tasks[dataset]
-            
-            try:
-                rows = run_group2_algorithm_comparison(
-                    detector, para_model, para_tok, args.device,
-                    target_task, dataset, inject_instr, inject_data_0,
-                    args.num_paraphrases, args.mw_rounds, args.mw_eta,
-                    args.epsilon, args.greedy_cal_size, args.data_num,
-                )
-                # Save each algorithm row to its own checkpoint
-                for row in rows:
-                    cond_key = row["condition"]
-                    if cond_key in ckpts and task_name not in done_per_algo[cond_key]:
-                        ckpts[cond_key].save_row(row)
-            except Exception as e:
-                print(f"  ✗ {task_name}: FAILED — {e}")
-                import traceback; traceback.print_exc()
+            for dataset in target_datasets:
+                task_name = DATASET_TO_TASK_NAME[dataset]
+                done_key = f"{task_name}__seed{seed}"
+                
+                # Skip task if all 4 algorithms already done for this seed
+                if all(done_key in done_per_algo[a] for a in algo_codes):
+                    print(f"  [G2] {task_name} seed={seed}: all algorithms complete (skipped)")
+                    continue
+                
+                print(f"\n  [G2] {task_name} seed={seed}")
+                target_task = target_tasks[dataset]
+                
+                try:
+                    rows = run_group2_algorithm_comparison(
+                        detector, para_model, para_tok, args.device,
+                        target_task, dataset, inject_instr, inject_data_0,
+                        args.num_paraphrases, args.mw_rounds, args.mw_eta,
+                        args.epsilon, args.greedy_cal_size, args.data_num,
+                    )
+                    # Save each algorithm row to its own checkpoint, tagged with seed
+                    for row in rows:
+                        cond_key = row["condition"]
+                        if cond_key in ckpts and done_key not in done_per_algo[cond_key]:
+                            row["seed"] = seed
+                            row["true_target_task"] = task_name
+                            row["target_task"] = done_key
+                            ckpts[cond_key].save_row(row)
+                except Exception as e:
+                    print(f"  ✗ {task_name} seed={seed}: FAILED — {e}")
+                    import traceback; traceback.print_exc()
     
     # ── GROUP 3: Cross-task transfer ────────────────────────────────────────
     if "3" in groups_to_run:
         print("\n" + "=" * 75)
         print("GROUP 3 — CROSS-TASK TRANSFER")
         print(f"  Source task: {DATASET_TO_TASK_NAME[args.transfer_source]}")
+        print(f"  Running {len(seeds)} seed(s): {seeds}")
         print("=" * 75)
         
         t_codes = ["T1_mw_mixture_transfer", "T2_argmax_transfer", "T3_mw_fresh_oracle"]
@@ -776,62 +828,124 @@ def main():
         # Transfer to all OTHER tasks (not the source)
         transfer_targets = [d for d in target_datasets if d != args.transfer_source]
         
-        for dataset in transfer_targets:
-            task_name = DATASET_TO_TASK_NAME[dataset]
+        for seed in seeds:
+            set_seed(seed)
+            print(f"\n[G3] === seed={seed} ===")
             
-            if all(task_name in done_per_t[t] for t in t_codes):
-                print(f"\n[G3] {task_name}: all transfer conditions complete (skipped)")
-                continue
-            
-            print(f"\n[G3] Transfer to {task_name}")
-            
-            try:
-                rows = run_group3_cross_task_transfer(
-                    detector, para_model, para_tok, args.device,
-                    target_tasks, args.transfer_source, dataset,
-                    inject_instr, inject_data_0,
-                    args.num_paraphrases, args.mw_rounds, args.mw_eta, args.data_num,
-                )
-                for row in rows:
-                    cond_key = row["condition"]
-                    if cond_key in ckpts3 and task_name not in done_per_t[cond_key]:
-                        ckpts3[cond_key].save_row(row)
-            except Exception as e:
-                print(f"  ✗ {task_name}: FAILED — {e}")
-                import traceback; traceback.print_exc()
+            for dataset in transfer_targets:
+                task_name = DATASET_TO_TASK_NAME[dataset]
+                done_key = f"{task_name}__seed{seed}"
+                
+                if all(done_key in done_per_t[t] for t in t_codes):
+                    print(f"  [G3] {task_name} seed={seed}: all transfer conditions complete (skipped)")
+                    continue
+                
+                print(f"\n  [G3] Transfer to {task_name} seed={seed}")
+                
+                try:
+                    rows = run_group3_cross_task_transfer(
+                        detector, para_model, para_tok, args.device,
+                        target_tasks, args.transfer_source, dataset,
+                        inject_instr, inject_data_0,
+                        args.num_paraphrases, args.mw_rounds, args.mw_eta, args.data_num,
+                    )
+                    for row in rows:
+                        cond_key = row["condition"]
+                        if cond_key in ckpts3 and done_key not in done_per_t[cond_key]:
+                            row["seed"] = seed
+                            row["true_target_task"] = task_name
+                            row["target_task"] = done_key
+                            ckpts3[cond_key].save_row(row)
+                except Exception as e:
+                    print(f"  ✗ {task_name} seed={seed}: FAILED — {e}")
+                    import traceback; traceback.print_exc()
     
     # ── Print summary ───────────────────────────────────────────────────────
     print("\n" + "=" * 75)
-    print("ABLATION SUMMARY")
+    print("ABLATION SUMMARY (mean ± std across seeds)")
     print("=" * 75)
     
     # Aggregate from checkpoints
     summary = {}
-    for csv_file in (save_dir / "checkpoints").glob("*.csv"):
+    for csv_file in sorted((save_dir / "checkpoints").glob("*.csv")):
         if csv_file.name.endswith("_meta.json"):
             continue
         try:
             df = pd.read_csv(csv_file)
             if df.empty:
                 continue
+            
             condition = df["condition"].iloc[0] if "condition" in df.columns else csv_file.stem
-            avg_fnr = df["fnr"].mean()
+            
+            # Determine the task column name (true_target_task in new runs, target_task in old runs)
+            task_col = "true_target_task" if "true_target_task" in df.columns else "target_task"
+            
+            # Group by task to compute per-task mean/std across seeds
+            per_task = {}
+            if "seed" in df.columns:
+                grouped = df.groupby(task_col)["fnr"].agg(["mean", "std", "count"])
+                for task_name, row in grouped.iterrows():
+                    per_task[task_name] = {
+                        "mean": float(row["mean"]),
+                        "std": float(row["std"]) if not pd.isna(row["std"]) else 0.0,
+                        "n_seeds": int(row["count"]),
+                    }
+                seeds_list = sorted(df["seed"].unique().tolist())
+            else:
+                # Backward compat: no seed column
+                for _, row in df.iterrows():
+                    per_task[row[task_col]] = {
+                        "mean": float(row["fnr"]),
+                        "std": 0.0,
+                        "n_seeds": 1,
+                    }
+                seeds_list = []
+            
+            # Overall stats: mean of per-task means, std across all (task, seed) pairs
+            overall_mean = float(df["fnr"].mean())
+            overall_std = float(df["fnr"].std()) if len(df) > 1 else 0.0
+            
             summary[condition] = {
-                "avg_fnr": float(avg_fnr),
-                "n_tasks": len(df),
+                "overall_mean_fnr": overall_mean,
+                "overall_std_fnr": overall_std,
+                "n_rows": len(df),
+                "n_tasks": len(per_task),
+                "seeds": seeds_list,
+                "n_seeds": len(seeds_list) if seeds_list else 1,
+                "per_task": per_task,
                 "avg_queries": float(df["queries"].mean()) if "queries" in df.columns else None,
             }
         except Exception as e:
             print(f"  Could not load {csv_file}: {e}")
     
     # Print summary table
-    print(f"\n{'Condition':<40} {'Avg FNR':>10} {'N':>4} {'Avg Queries':>12}")
-    print("-" * 70)
+    print(f"\n{'Condition':<35} {'Mean FNR':>12} {'Std':>8} {'#Tasks':>8} {'#Seeds':>8} {'Queries':>12}")
+    print("-" * 90)
     for cond in sorted(summary.keys()):
         s = summary[cond]
         q = f"{s['avg_queries']:.0f}" if s['avg_queries'] is not None else "—"
-        print(f"{cond:<40} {s['avg_fnr']:>10.4f} {s['n_tasks']:>4} {q:>12}")
-    print("=" * 70)
+        fnr_str = f"{s['overall_mean_fnr']:.4f}"
+        std_str = f"±{s['overall_std_fnr']:.4f}" if s['overall_std_fnr'] > 0 else "—"
+        print(f"{cond:<35} {fnr_str:>12} {std_str:>8} {s['n_tasks']:>8} {s['n_seeds']:>8} {q:>12}")
+    print("=" * 90)
+    
+    # Per-task breakdown for the main result conditions
+    print(f"\n{'PER-TASK BREAKDOWN (Mean ± Std)'}")
+    print("=" * 90)
+    main_conditions = ["C4_mw_phi_llm", "A4_multiplicative_weights"]
+    for cond in main_conditions:
+        if cond not in summary:
+            continue
+        s = summary[cond]
+        if not s["per_task"]:
+            continue
+        print(f"\n{cond}:")
+        print(f"  {'Task':<30} {'Mean':>10} {'Std':>10} {'#Seeds':>8}")
+        print("  " + "-" * 60)
+        for task in sorted(s["per_task"].keys()):
+            t = s["per_task"][task]
+            std_str = f"±{t['std']:.4f}" if t['std'] > 0 else "—"
+            print(f"  {task:<30} {t['mean']:>10.4f} {std_str:>10} {t['n_seeds']:>8}")
     
     # Save summary JSON
     with open(save_dir / "ablation_summary.json", "w") as f:

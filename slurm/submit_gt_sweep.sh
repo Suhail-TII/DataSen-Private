@@ -30,6 +30,7 @@ K_VALUES="5,10,20,30,50"
 T_FIXED=100
 ETA_FIXED=0.3
 NUM_PARA_FIXED=20
+SEEDS="42,43,44"
 DRY_RUN=0
 
 # ── Parse arguments ───────────────────────────────────────────────────────────
@@ -46,6 +47,7 @@ while [[ $# -gt 0 ]]; do
         --T-fixed)           T_FIXED="$2";           shift 2 ;;
         --eta-fixed)         ETA_FIXED="$2";         shift 2 ;;
         --num-para-fixed)    NUM_PARA_FIXED="$2";    shift 2 ;;
+        --seeds)             SEEDS="$2";             shift 2 ;;
         --dry-run)           DRY_RUN=1;              shift ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
@@ -64,6 +66,7 @@ echo "  T values          : $T_VALUES"
 echo "  η values          : $ETA_VALUES"
 echo "  K values          : $K_VALUES"
 echo "  Fixed T / η / |Φ| : $T_FIXED / $ETA_FIXED / $NUM_PARA_FIXED"
+echo "  Seeds             : $SEEDS"
 echo "  Checkpoint        : $CKPT_DETECTOR"
 echo "  Paraphrase model  : $PARAPHRASE_MODEL"
 echo "  Output dir        : $RUN_DIR"
@@ -103,6 +106,7 @@ EXPORT="$EXPORT,K_VALUES=$K_VALUES"
 EXPORT="$EXPORT,T_FIXED=$T_FIXED"
 EXPORT="$EXPORT,ETA_FIXED=$ETA_FIXED"
 EXPORT="$EXPORT,NUM_PARA_FIXED=$NUM_PARA_FIXED"
+EXPORT="$EXPORT,SEEDS=$SEEDS"
 
 # ── Submit chained segments ──────────────────────────────────────────────────
 CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=$EXPORT slurm/slurm_gt_sweep.sh"

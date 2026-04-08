@@ -27,6 +27,7 @@ DATA_NUM=100
 NUM_PARAPHRASES=20
 MW_ROUNDS=100
 MW_ETA=0.3
+SEEDS="42,43,44"
 DRY_RUN=0
 
 # ── Parse arguments ───────────────────────────────────────────────────────────
@@ -40,6 +41,7 @@ while [[ $# -gt 0 ]]; do
         --num-paraphrases)   NUM_PARAPHRASES="$2";   shift 2 ;;
         --mw-rounds)         MW_ROUNDS="$2";         shift 2 ;;
         --mw-eta)            MW_ETA="$2";            shift 2 ;;
+        --seeds)             SEEDS="$2";             shift 2 ;;
         --dry-run)           DRY_RUN=1;              shift ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
@@ -54,6 +56,7 @@ echo "======================================================================"
 echo "GT-Semantic Ablation — Job Submission"
 echo "======================================================================"
 echo "  Groups            : $GROUPS"
+echo "  Seeds             : $SEEDS"
 echo "  Checkpoint        : $CKPT_DETECTOR"
 echo "  Paraphrase model  : $PARAPHRASE_MODEL"
 echo "  Repo dir          : $REPO_DIR"
@@ -95,6 +98,7 @@ EXPORT="$EXPORT,DATA_NUM=$DATA_NUM"
 EXPORT="$EXPORT,NUM_PARAPHRASES=$NUM_PARAPHRASES"
 EXPORT="$EXPORT,MW_ROUNDS=$MW_ROUNDS"
 EXPORT="$EXPORT,MW_ETA=$MW_ETA"
+EXPORT="$EXPORT,SEEDS=$SEEDS"
 
 # ── Submit primary segment ────────────────────────────────────────────────────
 CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=$EXPORT slurm/slurm_gt_ablation.sh"

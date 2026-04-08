@@ -62,6 +62,7 @@ from gt_semantic_attack import (
     DATASETS, DATASET_TO_TASK_NAME, INJECT_DATASET,
     DATASENTINEL_SEPARATORS,
     Strategy, MWState,
+    set_seed,
     load_all_tasks, load_detector, load_paraphrase_model,
     generate_paraphrase_pool, build_strategy_pool, apply_strategy,
     multiplicative_weights_learn, exploit_learned_strategy,
@@ -127,48 +128,56 @@ def sweep_T(
     target_tasks_dict: Dict, target_datasets: List[str],
     inject_instr: str, inject_data: str,
     T_values: List[int], eta_fixed: float, num_paraphrases_fixed: int,
-    data_num: int, save_dir: Path, resume: bool,
+    data_num: int, save_dir: Path, resume: bool, seeds: List[int],
 ):
-    """S1: Sweep MW learning rounds T."""
+    """S1: Sweep MW learning rounds T (across multiple seeds)."""
     print("\n" + "=" * 75)
     print(f"SWEEP S1: MW Learning Rounds (T)")
     print(f"  T values: {T_values}")
     print(f"  Fixed: η={eta_fixed}, |Φ_LLM|={num_paraphrases_fixed}")
+    print(f"  Seeds:  {seeds}")
     print("=" * 75)
     
     ckpt = CheckpointManager(save_dir, "S1_T", "sweep")
     done = ckpt.get_completed_tasks() if resume else set()
     
-    # Generate paraphrase pool ONCE — same Φ_LLM across all T values for fair comparison
-    print(f"\n  Generating Φ_LLM (|Φ|={num_paraphrases_fixed})...")
-    paraphrases = generate_paraphrase_pool(
-        para_model, para_tok, device, inject_instr, inject_data,
-        num_paraphrases=num_paraphrases_fixed,
-    )
-    
-    for T in T_values:
-        for dataset in target_datasets:
-            task_name = DATASET_TO_TASK_NAME[dataset]
-            done_key = f"{task_name}__T{T}"
-            
-            if done_key in done:
-                print(f"  ⊙ T={T}, {task_name} (skipped — checkpoint)")
-                continue
-            
-            print(f"  → T={T}, {task_name}...", end=" ", flush=True)
-            try:
-                row = run_single_config(
-                    detector, paraphrases, target_tasks_dict[dataset], dataset,
-                    T=T, eta=eta_fixed, data_num=data_num,
-                )
-                row["sweep"] = "S1_T"
-                row["target_task"] = done_key   # composite key for checkpoint resume
-                row["true_target_task"] = task_name
-                ckpt.save_row(row)
-                print(f"FNR={row['fnr']:.4f}")
-            except Exception as e:
-                print(f"FAILED — {e}")
-                import traceback; traceback.print_exc()
+    for seed in seeds:
+        set_seed(seed)
+        print(f"\n  === seed={seed} ===")
+        
+        # Generate paraphrase pool ONCE per seed — same Φ_LLM across all T values
+        # for fair comparison within a seed. Different across seeds (intentional —
+        # we want to measure variance from both Φ_LLM and MW sampling).
+        print(f"  Generating Φ_LLM (|Φ|={num_paraphrases_fixed}) for seed={seed}...")
+        paraphrases = generate_paraphrase_pool(
+            para_model, para_tok, device, inject_instr, inject_data,
+            num_paraphrases=num_paraphrases_fixed,
+        )
+        
+        for T in T_values:
+            for dataset in target_datasets:
+                task_name = DATASET_TO_TASK_NAME[dataset]
+                done_key = f"{task_name}__T{T}__seed{seed}"
+                
+                if done_key in done:
+                    print(f"  ⊙ T={T}, {task_name}, seed={seed} (skipped — checkpoint)")
+                    continue
+                
+                print(f"  → T={T}, {task_name}, seed={seed}...", end=" ", flush=True)
+                try:
+                    row = run_single_config(
+                        detector, paraphrases, target_tasks_dict[dataset], dataset,
+                        T=T, eta=eta_fixed, data_num=data_num,
+                    )
+                    row["sweep"] = "S1_T"
+                    row["seed"] = seed
+                    row["target_task"] = done_key   # composite key for checkpoint resume
+                    row["true_target_task"] = task_name
+                    ckpt.save_row(row)
+                    print(f"FNR={row['fnr']:.4f}")
+                except Exception as e:
+                    print(f"FAILED — {e}")
+                    import traceback; traceback.print_exc()
 
 
 def sweep_eta(
@@ -176,47 +185,53 @@ def sweep_eta(
     target_tasks_dict: Dict, target_datasets: List[str],
     inject_instr: str, inject_data: str,
     eta_values: List[float], T_fixed: int, num_paraphrases_fixed: int,
-    data_num: int, save_dir: Path, resume: bool,
+    data_num: int, save_dir: Path, resume: bool, seeds: List[int],
 ):
-    """S2: Sweep MW learning rate η."""
+    """S2: Sweep MW learning rate η (across multiple seeds)."""
     print("\n" + "=" * 75)
     print(f"SWEEP S2: MW Learning Rate (η)")
     print(f"  η values: {eta_values}")
     print(f"  Fixed: T={T_fixed}, |Φ_LLM|={num_paraphrases_fixed}")
+    print(f"  Seeds:  {seeds}")
     print("=" * 75)
     
     ckpt = CheckpointManager(save_dir, "S2_eta", "sweep")
     done = ckpt.get_completed_tasks() if resume else set()
     
-    print(f"\n  Generating Φ_LLM (|Φ|={num_paraphrases_fixed})...")
-    paraphrases = generate_paraphrase_pool(
-        para_model, para_tok, device, inject_instr, inject_data,
-        num_paraphrases=num_paraphrases_fixed,
-    )
-    
-    for eta in eta_values:
-        for dataset in target_datasets:
-            task_name = DATASET_TO_TASK_NAME[dataset]
-            done_key = f"{task_name}__eta{eta}"
-            
-            if done_key in done:
-                print(f"  ⊙ η={eta}, {task_name} (skipped — checkpoint)")
-                continue
-            
-            print(f"  → η={eta}, {task_name}...", end=" ", flush=True)
-            try:
-                row = run_single_config(
-                    detector, paraphrases, target_tasks_dict[dataset], dataset,
-                    T=T_fixed, eta=eta, data_num=data_num,
-                )
-                row["sweep"] = "S2_eta"
-                row["target_task"] = done_key
-                row["true_target_task"] = task_name
-                ckpt.save_row(row)
-                print(f"FNR={row['fnr']:.4f}")
-            except Exception as e:
-                print(f"FAILED — {e}")
-                import traceback; traceback.print_exc()
+    for seed in seeds:
+        set_seed(seed)
+        print(f"\n  === seed={seed} ===")
+        
+        print(f"  Generating Φ_LLM (|Φ|={num_paraphrases_fixed}) for seed={seed}...")
+        paraphrases = generate_paraphrase_pool(
+            para_model, para_tok, device, inject_instr, inject_data,
+            num_paraphrases=num_paraphrases_fixed,
+        )
+        
+        for eta in eta_values:
+            for dataset in target_datasets:
+                task_name = DATASET_TO_TASK_NAME[dataset]
+                done_key = f"{task_name}__eta{eta}__seed{seed}"
+                
+                if done_key in done:
+                    print(f"  ⊙ η={eta}, {task_name}, seed={seed} (skipped — checkpoint)")
+                    continue
+                
+                print(f"  → η={eta}, {task_name}, seed={seed}...", end=" ", flush=True)
+                try:
+                    row = run_single_config(
+                        detector, paraphrases, target_tasks_dict[dataset], dataset,
+                        T=T_fixed, eta=eta, data_num=data_num,
+                    )
+                    row["sweep"] = "S2_eta"
+                    row["seed"] = seed
+                    row["target_task"] = done_key
+                    row["true_target_task"] = task_name
+                    ckpt.save_row(row)
+                    print(f"FNR={row['fnr']:.4f}")
+                except Exception as e:
+                    print(f"FAILED — {e}")
+                    import traceback; traceback.print_exc()
 
 
 def sweep_K(
@@ -224,55 +239,60 @@ def sweep_K(
     target_tasks_dict: Dict, target_datasets: List[str],
     inject_instr: str, inject_data: str,
     K_values: List[int], T_fixed: int, eta_fixed: float,
-    data_num: int, save_dir: Path, resume: bool,
+    data_num: int, save_dir: Path, resume: bool, seeds: List[int],
 ):
-    """S3: Sweep strategy pool size via num_paraphrases."""
+    """S3: Sweep strategy pool size via num_paraphrases (across multiple seeds)."""
     print("\n" + "=" * 75)
     print(f"SWEEP S3: Strategy Pool Size (|Φ_LLM|)")
     print(f"  num_paraphrases values: {K_values}")
     print(f"  Fixed: T={T_fixed}, η={eta_fixed}")
+    print(f"  Seeds:  {seeds}")
     print("=" * 75)
     
     ckpt = CheckpointManager(save_dir, "S3_K", "sweep")
     done = ckpt.get_completed_tasks() if resume else set()
     
-    # IMPORTANT: Generate the LARGEST pool once, then truncate for smaller K values.
-    # This avoids regenerating overlapping paraphrases and ensures the smaller pools
-    # are subsets of the larger ones (cleaner monotonicity analysis).
-    max_K = max(K_values)
-    print(f"\n  Generating max paraphrase pool (|Φ|={max_K})...")
-    full_paraphrases = generate_paraphrase_pool(
-        para_model, para_tok, device, inject_instr, inject_data,
-        num_paraphrases=max_K,
-    )
-    print(f"  Generated {len(full_paraphrases)} paraphrases")
-    
-    for K in K_values:
-        # Truncate to first K paraphrases
-        paraphrases = full_paraphrases[:K]
+    for seed in seeds:
+        set_seed(seed)
+        print(f"\n  === seed={seed} ===")
         
-        for dataset in target_datasets:
-            task_name = DATASET_TO_TASK_NAME[dataset]
-            done_key = f"{task_name}__K{K}"
+        # Generate the LARGEST pool once per seed, then truncate for smaller K values.
+        # Smaller pools are subsets of the larger ones (cleaner monotonicity analysis).
+        max_K = max(K_values)
+        print(f"  Generating max paraphrase pool (|Φ|={max_K}) for seed={seed}...")
+        full_paraphrases = generate_paraphrase_pool(
+            para_model, para_tok, device, inject_instr, inject_data,
+            num_paraphrases=max_K,
+        )
+        print(f"  Generated {len(full_paraphrases)} paraphrases")
+        
+        for K in K_values:
+            # Truncate to first K paraphrases
+            paraphrases = full_paraphrases[:K]
             
-            if done_key in done:
-                print(f"  ⊙ K={K}, {task_name} (skipped — checkpoint)")
-                continue
-            
-            print(f"  → K={K}, {task_name}...", end=" ", flush=True)
-            try:
-                row = run_single_config(
-                    detector, paraphrases, target_tasks_dict[dataset], dataset,
-                    T=T_fixed, eta=eta_fixed, data_num=data_num,
-                )
-                row["sweep"] = "S3_K"
-                row["target_task"] = done_key
-                row["true_target_task"] = task_name
-                ckpt.save_row(row)
-                print(f"FNR={row['fnr']:.4f}")
-            except Exception as e:
-                print(f"FAILED — {e}")
-                import traceback; traceback.print_exc()
+            for dataset in target_datasets:
+                task_name = DATASET_TO_TASK_NAME[dataset]
+                done_key = f"{task_name}__K{K}__seed{seed}"
+                
+                if done_key in done:
+                    print(f"  ⊙ K={K}, {task_name}, seed={seed} (skipped — checkpoint)")
+                    continue
+                
+                print(f"  → K={K}, {task_name}, seed={seed}...", end=" ", flush=True)
+                try:
+                    row = run_single_config(
+                        detector, paraphrases, target_tasks_dict[dataset], dataset,
+                        T=T_fixed, eta=eta_fixed, data_num=data_num,
+                    )
+                    row["sweep"] = "S3_K"
+                    row["seed"] = seed
+                    row["target_task"] = done_key
+                    row["true_target_task"] = task_name
+                    ckpt.save_row(row)
+                    print(f"FNR={row['fnr']:.4f}")
+                except Exception as e:
+                    print(f"FAILED — {e}")
+                    import traceback; traceback.print_exc()
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -280,9 +300,9 @@ def sweep_K(
 # ═════════════════════════════════════════════════════════════════════════════
 
 def analyze_sweep_results(save_dir: Path):
-    """Aggregate sweep results into summary tables."""
+    """Aggregate sweep results into summary tables with mean ± std across seeds."""
     print("\n" + "=" * 75)
-    print("SWEEP ANALYSIS")
+    print("SWEEP ANALYSIS (mean ± std across seeds)")
     print("=" * 75)
     
     summaries = {}
@@ -296,22 +316,48 @@ def analyze_sweep_results(save_dir: Path):
         if df.empty:
             continue
         
+        has_seeds = "seed" in df.columns
+        
         print(f"\n{sweep_name} — sweep over {swept_param}:")
-        print(f"{'Value':>10} {'Avg FNR':>10} {'Min FNR':>10} {'Max FNR':>10} {'N tasks':>10}")
-        print("-" * 55)
+        if has_seeds:
+            n_seeds = df["seed"].nunique()
+            print(f"  ({n_seeds} seed(s): {sorted(df['seed'].unique().tolist())})")
+            print(f"{'Value':>10} {'Mean FNR':>12} {'Std':>10} {'Min':>10} {'Max':>10} {'#Tasks':>8} {'#Seeds':>8}")
+            print("-" * 75)
+        else:
+            print(f"{'Value':>10} {'Avg FNR':>10} {'Min FNR':>10} {'Max FNR':>10} {'N tasks':>10}")
+            print("-" * 55)
         
         sweep_summary = []
         for value in sorted(df[swept_param].unique()):
             subset = df[df[swept_param] == value]
-            avg = subset["fnr"].mean()
-            mn = subset["fnr"].min()
-            mx = subset["fnr"].max()
-            n = len(subset)
-            print(f"{value:>10} {avg:>10.4f} {mn:>10.4f} {mx:>10.4f} {n:>10}")
-            sweep_summary.append({
-                swept_param: float(value), "avg_fnr": float(avg),
-                "min_fnr": float(mn), "max_fnr": float(mx), "n_tasks": int(n),
-            })
+            avg = float(subset["fnr"].mean())
+            std = float(subset["fnr"].std()) if len(subset) > 1 else 0.0
+            mn = float(subset["fnr"].min())
+            mx = float(subset["fnr"].max())
+            
+            if has_seeds:
+                # Per-task mean across seeds, then average across tasks
+                task_col = "true_target_task" if "true_target_task" in subset.columns else "target_task"
+                per_task_means = subset.groupby(task_col)["fnr"].mean()
+                n_tasks = len(per_task_means)
+                n_seeds_here = subset["seed"].nunique()
+                std_str = f"±{std:.4f}" if std > 0 else "—"
+                print(f"{value:>10} {avg:>12.4f} {std_str:>10} {mn:>10.4f} {mx:>10.4f} {n_tasks:>8} {n_seeds_here:>8}")
+                sweep_summary.append({
+                    swept_param: float(value),
+                    "mean_fnr": avg, "std_fnr": std,
+                    "min_fnr": mn, "max_fnr": mx,
+                    "n_tasks": int(n_tasks), "n_seeds": int(n_seeds_here),
+                    "n_rows": len(subset),
+                })
+            else:
+                n = len(subset)
+                print(f"{value:>10} {avg:>10.4f} {mn:>10.4f} {mx:>10.4f} {n:>10}")
+                sweep_summary.append({
+                    swept_param: float(value), "avg_fnr": avg,
+                    "min_fnr": mn, "max_fnr": mx, "n_tasks": int(n),
+                })
         
         summaries[sweep_name] = sweep_summary
     
@@ -351,6 +397,8 @@ def main():
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--analyze_only", action="store_true",
                         help="Skip running, just aggregate existing results")
+    parser.add_argument("--seeds", type=str, default="42",
+                        help="Comma-separated list of seeds (e.g. '42,43,44') for mean±std reporting")
     args = parser.parse_args()
     
     save_dir = Path(args.save_dir)
@@ -360,6 +408,7 @@ def main():
     T_values = [int(x) for x in args.T_values.split(",")]
     eta_values = [float(x) for x in args.eta_values.split(",")]
     K_values = [int(x) for x in args.K_values.split(",")]
+    seeds = [int(s.strip()) for s in args.seeds.split(",")]
     
     print("=" * 75)
     print("GT-SEMANTIC ATTACK — HYPERPARAMETER SWEEP")
@@ -371,6 +420,7 @@ def main():
     print(f"  Fixed T    : {args.T_fixed}")
     print(f"  Fixed η    : {args.eta_fixed}")
     print(f"  Fixed |Φ|  : {args.num_paraphrases_fixed}")
+    print(f"  Seeds      : {seeds}")
     print(f"  data_num   : {args.data_num}")
     print(f"  Save dir   : {save_dir}")
     print(f"  Resume     : {args.resume}")
@@ -404,6 +454,7 @@ def main():
             T_values=T_values, eta_fixed=args.eta_fixed,
             num_paraphrases_fixed=args.num_paraphrases_fixed,
             data_num=args.data_num, save_dir=save_dir, resume=args.resume,
+            seeds=seeds,
         )
     
     if "eta" in sweeps_to_run:
@@ -413,6 +464,7 @@ def main():
             eta_values=eta_values, T_fixed=args.T_fixed,
             num_paraphrases_fixed=args.num_paraphrases_fixed,
             data_num=args.data_num, save_dir=save_dir, resume=args.resume,
+            seeds=seeds,
         )
     
     if "K" in sweeps_to_run:
@@ -421,6 +473,7 @@ def main():
             target_tasks, target_datasets, inject_instr, inject_data_0,
             K_values=K_values, T_fixed=args.T_fixed, eta_fixed=args.eta_fixed,
             data_num=args.data_num, save_dir=save_dir, resume=args.resume,
+            seeds=seeds,
         )
     
     # ── Analyze ─────────────────────────────────────────────────────────────
