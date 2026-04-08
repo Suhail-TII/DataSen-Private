@@ -94,22 +94,24 @@ done
 
 echo "  Array indices     : $ARRAY_INDICES"
 
-# ── Build export string ──────────────────────────────────────────────────────
-EXPORT="RUN_DIR=$RUN_DIR"
-EXPORT="$EXPORT,CKPT_DETECTOR=$CKPT_DETECTOR"
-EXPORT="$EXPORT,PARAPHRASE_MODEL=$PARAPHRASE_MODEL"
-EXPORT="$EXPORT,REPO_DIR=$REPO_DIR"
-EXPORT="$EXPORT,DATA_NUM=$DATA_NUM"
-EXPORT="$EXPORT,T_VALUES=$T_VALUES"
-EXPORT="$EXPORT,ETA_VALUES=$ETA_VALUES"
-EXPORT="$EXPORT,K_VALUES=$K_VALUES"
-EXPORT="$EXPORT,T_FIXED=$T_FIXED"
-EXPORT="$EXPORT,ETA_FIXED=$ETA_FIXED"
-EXPORT="$EXPORT,NUM_PARA_FIXED=$NUM_PARA_FIXED"
-EXPORT="$EXPORT,SEEDS=$SEEDS"
+# ── Export variables to environment so sbatch --export=ALL inherits them ─────
+# We use export+ALL instead of --export=A=1,B=2 because sbatch's comma-list
+# parsing breaks on values that themselves contain commas (T_VALUES, SEEDS, etc).
+export RUN_DIR
+export CKPT_DETECTOR
+export PARAPHRASE_MODEL
+export REPO_DIR
+export DATA_NUM
+export T_VALUES
+export ETA_VALUES
+export K_VALUES
+export T_FIXED
+export ETA_FIXED
+export NUM_PARA_FIXED
+export SEEDS
 
 # ── Submit chained segments ──────────────────────────────────────────────────
-CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=$EXPORT slurm/slurm_gt_sweep.sh"
+CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=ALL slurm/slurm_gt_sweep.sh"
 
 echo ""
 echo "Submitting Segment 1/3 (72h walltime each)..."
@@ -120,12 +122,12 @@ if [[ $DRY_RUN -eq 0 ]]; then
     JID1=$(echo "$OUT1" | grep -oP '\d+' | head -1)
     echo "  → Segment 1 Job ID: $JID1"
     
-    OUT2=$(sbatch --array=$ARRAY_INDICES --export=$EXPORT \
+    OUT2=$(sbatch --array=$ARRAY_INDICES --export=ALL \
                   --dependency=afterany:$JID1 slurm/slurm_gt_sweep.sh)
     JID2=$(echo "$OUT2" | grep -oP '\d+' | head -1)
     echo "  → Segment 2 Job ID: $JID2 (starts after $JID1)"
     
-    OUT3=$(sbatch --array=$ARRAY_INDICES --export=$EXPORT \
+    OUT3=$(sbatch --array=$ARRAY_INDICES --export=ALL \
                   --dependency=afterany:$JID2 slurm/slurm_gt_sweep.sh)
     JID3=$(echo "$OUT3" | grep -oP '\d+' | head -1)
     echo "  → Segment 3 Job ID: $JID3 (starts after $JID2)"

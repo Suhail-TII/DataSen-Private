@@ -19,7 +19,7 @@
 set -euo pipefail
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-GROUPS="1,2,3"
+RUN_GROUPS="1,2,3"
 CKPT_DETECTOR="/dpc/kuex0037/Open-Prompt-Injection/DataSentinel_Models/detector_large/checkpoint-5000"
 PARAPHRASE_MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
 REPO_DIR="/dpc/kuex0037/Open-Prompt-Injection"
@@ -33,7 +33,7 @@ DRY_RUN=0
 # ── Parse arguments ───────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --groups)            GROUPS="$2";            shift 2 ;;
+        --groups)            RUN_GROUPS="$2";            shift 2 ;;
         --ckpt-detector)     CKPT_DETECTOR="$2";     shift 2 ;;
         --paraphrase-model)  PARAPHRASE_MODEL="$2";  shift 2 ;;
         --repo-dir)          REPO_DIR="$2";          shift 2 ;;
@@ -55,7 +55,7 @@ mkdir -p "$RUN_DIR" logs
 echo "======================================================================"
 echo "GT-Semantic Ablation — Job Submission"
 echo "======================================================================"
-echo "  Groups            : $GROUPS"
+echo "  Groups            : $RUN_GROUPS"
 echo "  Seeds             : $SEEDS"
 echo "  Checkpoint        : $CKPT_DETECTOR"
 echo "  Paraphrase model  : $PARAPHRASE_MODEL"
@@ -71,7 +71,7 @@ echo "======================================================================"
 # ── Convert groups list to array task indices ────────────────────────────────
 # G1 → task 0, G2 → task 1, G3 → task 2
 ARRAY_INDICES=""
-IFS=',' read -ra GROUP_LIST <<< "$GROUPS"
+IFS=',' read -ra GROUP_LIST <<< "$RUN_GROUPS"
 for G in "${GROUP_LIST[@]}"; do
     G=$(echo $G | tr -d ' ')
     case $G in
@@ -89,19 +89,21 @@ done
 
 echo "  Array indices     : $ARRAY_INDICES"
 
-# ── Build export string ──────────────────────────────────────────────────────
-EXPORT="RUN_DIR=$RUN_DIR"
-EXPORT="$EXPORT,CKPT_DETECTOR=$CKPT_DETECTOR"
-EXPORT="$EXPORT,PARAPHRASE_MODEL=$PARAPHRASE_MODEL"
-EXPORT="$EXPORT,REPO_DIR=$REPO_DIR"
-EXPORT="$EXPORT,DATA_NUM=$DATA_NUM"
-EXPORT="$EXPORT,NUM_PARAPHRASES=$NUM_PARAPHRASES"
-EXPORT="$EXPORT,MW_ROUNDS=$MW_ROUNDS"
-EXPORT="$EXPORT,MW_ETA=$MW_ETA"
-EXPORT="$EXPORT,SEEDS=$SEEDS"
+# ── Export variables to environment so sbatch --export=ALL inherits them ─────
+# We use export+ALL instead of --export=A=1,B=2 because sbatch's comma-list
+# parsing breaks on values that themselves contain commas (like SEEDS=42,43,44).
+export RUN_DIR
+export CKPT_DETECTOR
+export PARAPHRASE_MODEL
+export REPO_DIR
+export DATA_NUM
+export NUM_PARAPHRASES
+export MW_ROUNDS
+export MW_ETA
+export SEEDS
 
 # ── Submit primary segment ────────────────────────────────────────────────────
-CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=$EXPORT slurm/slurm_gt_ablation.sh"
+CMD_SEG1="sbatch --array=$ARRAY_INDICES --export=ALL slurm/slurm_gt_ablation.sh"
 
 echo ""
 echo "Submitting Segment 1/3 (72h walltime each)..."
@@ -114,12 +116,12 @@ if [[ $DRY_RUN -eq 0 ]]; then
     
     # Chained segments — each waits for the previous one. Resume kicks in
     # automatically thanks to checkpointing. Total = 9 days walltime coverage.
-    OUT2=$(sbatch --array=$ARRAY_INDICES --export=$EXPORT \
+    OUT2=$(sbatch --array=$ARRAY_INDICES --export=ALL \
                   --dependency=afterany:$JID1 slurm/slurm_gt_ablation.sh)
     JID2=$(echo "$OUT2" | grep -oP '\d+' | head -1)
     echo "  → Segment 2 Job ID: $JID2 (starts after $JID1)"
     
-    OUT3=$(sbatch --array=$ARRAY_INDICES --export=$EXPORT \
+    OUT3=$(sbatch --array=$ARRAY_INDICES --export=ALL \
                   --dependency=afterany:$JID2 slurm/slurm_gt_ablation.sh)
     JID3=$(echo "$OUT3" | grep -oP '\d+' | head -1)
     echo "  → Segment 3 Job ID: $JID3 (starts after $JID2)"
