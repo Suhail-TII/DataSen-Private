@@ -22,7 +22,7 @@ set -euo pipefail
 GROUPS="1,2,3"
 CKPT_DETECTOR="/dpc/kuex0037/DataSentinel/DataSentinel_Models/detector_large/checkpoint-5000"
 PARAPHRASE_MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
-REPO_DIR="/dpc/kuex0037/DataSentinel/Open-Prompt-Injection"
+REPO_DIR="/dpc/kuex0037/Open-Prompt-Injection"
 DATA_NUM=100
 NUM_PARAPHRASES=20
 MW_ROUNDS=100
