@@ -20,7 +20,7 @@ set -euo pipefail
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
 GROUPS="1,2,3"
-CKPT_DETECTOR="/dpc/kuex0037/DataSentinel/DataSentinel_Models/detector_large/checkpoint-5000"
+CKPT_DETECTOR="/dpc/kuex0037/Open-Prompt-Injection/DataSentinel_Models/detector_large/checkpoint-5000"
 PARAPHRASE_MODEL="meta-llama/Meta-Llama-3.1-8B-Instruct"
 REPO_DIR="/dpc/kuex0037/Open-Prompt-Injection"
 DATA_NUM=100
@@ -49,7 +49,7 @@ done
 
 # ── Setup output directory ────────────────────────────────────────────────────
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-RUN_DIR="/dpc/kuex0037/DataSentinel/results/gt_ablation/run_${TIMESTAMP}"
+RUN_DIR="/dpc/kuex0037/Open-Prompt-Injection/results/gt_ablation/run_${TIMESTAMP}"
 mkdir -p "$RUN_DIR" logs
 
 echo "======================================================================"
