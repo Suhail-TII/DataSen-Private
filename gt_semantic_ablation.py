@@ -116,28 +116,43 @@ class CheckpointManager:
     
     def get_completed_tasks(self) -> Set[str]:
         """
-        Return set of (target_task, seed) tuples already completed, encoded
-        as composite strings 'task_name__seed{N}' for backward-compatible
-        membership tests.
+        Return set of (task, seed) composite keys already completed, as
+        strings 'task_name__seed{N}' for membership tests in the main loop.
         
-        If 'seed' column is missing (old checkpoints), falls back to just
-        target_task names.
+        Prefers 'true_target_task' (clean display name) if present. Falls back
+        to 'target_task', which may already contain the composite suffix in
+        older runs — detected and handled to avoid double-suffixing.
         """
         if not self.csv_path.exists():
             return set()
         try:
             df = pd.read_csv(self.csv_path)
-            if 'target_task' not in df.columns:
+            if df.empty:
                 return set()
-            if 'seed' in df.columns:
-                # Build composite keys: 'task__seed42'
+            
+            # Preferred path: use true_target_task (clean display name)
+            if 'true_target_task' in df.columns and 'seed' in df.columns:
                 return set(
-                    f"{r['target_task']}__seed{int(r['seed'])}"
-                    for _, r in df[['target_task', 'seed']].iterrows()
+                    f"{r['true_target_task']}__seed{int(r['seed'])}"
+                    for _, r in df[['true_target_task', 'seed']].iterrows()
                 )
-            else:
-                # Backward compat: just task names
+            
+            # Fallback: target_task column with seed, guarding double-suffix
+            if 'target_task' in df.columns and 'seed' in df.columns:
+                keys = set()
+                for _, r in df[['target_task', 'seed']].iterrows():
+                    tt = str(r['target_task'])
+                    if '__seed' in tt:
+                        keys.add(tt)
+                    else:
+                        keys.add(f"{tt}__seed{int(r['seed'])}")
+                return keys
+            
+            # Backward compat: just task names, no seed column
+            if 'target_task' in df.columns:
                 return set(df['target_task'].unique().tolist())
+            
+            return set()
         except Exception as e:
             print(f"  [Checkpoint] Could not read {self.csv_path}: {e}")
             return set()

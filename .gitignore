@@ -26,3 +26,4 @@ results/*
 !results/table*
 !results/game_*
 !results/enhanced_semantic
+!results/gt_*

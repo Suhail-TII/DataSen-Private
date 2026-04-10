@@ -1,0 +1,480 @@
+{
+  "C1_published_baseline": {
+    "overall_mean_fnr": 0.0,
+    "overall_std_fnr": 0.0,
+    "n_rows": 12,
+    "n_tasks": 6,
+    "seeds": [
+      42
+    ],
+    "n_seeds": 1,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      },
+      "Grammar correction": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 2
+      }
+    },
+    "avg_queries": 100.0
+  },
+  "C2_mw_original_only": {
+    "overall_mean_fnr": 0.0,
+    "overall_std_fnr": 0.0,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "C3_mw_single_paraphrase": {
+    "overall_mean_fnr": 0.008333333333333335,
+    "overall_std_fnr": 0.018898223650461364,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 0.05000000000000001,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "C4_mw_phi_llm": {
+    "overall_mean_fnr": 0.9533333333333334,
+    "overall_std_fnr": 0.08886587003536767,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.8333333333333334,
+        "std": 0.1650050504277571,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.9966666666666667,
+        "std": 0.005163977794943233,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.9233333333333333,
+        "std": 0.036147844564602544,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.9666666666666667,
+        "std": 0.02581988897471614,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "A1_random": {
+    "overall_mean_fnr": 0.29055555555555557,
+    "overall_std_fnr": 0.06355849699043033,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.25333333333333335,
+        "std": 0.03723797345005052,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 0.34,
+        "std": 0.03898717737923586,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.3466666666666667,
+        "std": 0.07814516406449389,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.24666666666666667,
+        "std": 0.049261208538429774,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.3033333333333333,
+        "std": 0.059553897157672765,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.25333333333333335,
+        "std": 0.027325202042558935,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 100.0
+  },
+  "A2_greedy": {
+    "overall_mean_fnr": 0.9933333333333333,
+    "overall_std_fnr": 0.014735767952260156,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.98,
+        "std": 0.02366431913239848,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.98,
+        "std": 0.017888543819998333,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 1570.0
+  },
+  "A3_epsilon_greedy": {
+    "overall_mean_fnr": 0.9177777777777778,
+    "overall_std_fnr": 0.22797382194467744,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.9833333333333334,
+        "std": 0.01861898672502527,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 0.68,
+        "std": 0.4957418683145494,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.9866666666666667,
+        "std": 0.013662601021279475,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9833333333333334,
+        "std": 0.02581988897471614,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.8733333333333334,
+        "std": 0.15002222057637543,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "A4_multiplicative_weights": {
+    "overall_mean_fnr": 0.9583333333333334,
+    "overall_std_fnr": 0.08875326955748085,
+    "n_rows": 36,
+    "n_tasks": 6,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.8333333333333334,
+        "std": 0.1650050504277571,
+        "n_seeds": 6
+      },
+      "Grammar correction": {
+        "mean": 0.9933333333333333,
+        "std": 0.005163977794943222,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.9566666666666667,
+        "std": 0.05955389715767277,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9966666666666667,
+        "std": 0.005163977794943222,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.9766666666666666,
+        "std": 0.01861898672502526,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.9933333333333333,
+        "std": 0.010327955589886443,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "T1_mw_mixture_transfer": {
+    "overall_mean_fnr": 0.3466666666666666,
+    "overall_std_fnr": 0.06681592486894089,
+    "n_rows": 30,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 0.42,
+        "std": 0.05440588203494179,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.3433333333333333,
+        "std": 0.04589843860815602,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.31666666666666665,
+        "std": 0.042268979957726265,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.3066666666666667,
+        "std": 0.04926120853842976,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.3466666666666667,
+        "std": 0.08453795991545257,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": null
+  },
+  "T2_argmax_transfer": {
+    "overall_mean_fnr": 0.8126666666666666,
+    "overall_std_fnr": 0.3085777533864965,
+    "n_rows": 30,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 0.5433333333333333,
+        "std": 0.3461021043950277,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 0.9899999999999999,
+        "std": 0.008944271909999172,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.9700000000000001,
+        "std": 0.0268328157299975,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.5599999999999999,
+        "std": 0.398095465937506,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": null
+  },
+  "T3_mw_fresh_oracle": {
+    "overall_mean_fnr": 0.9413333333333334,
+    "overall_std_fnr": 0.1350793721543345,
+    "n_rows": 30,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Hate detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 6
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9866666666666667,
+        "std": 0.020655911179772907,
+        "n_seeds": 6
+      },
+      "Spam detection": {
+        "mean": 0.87,
+        "std": 0.20139513400278566,
+        "n_seeds": 6
+      },
+      "Summarization": {
+        "mean": 0.85,
+        "std": 0.19493588689617927,
+        "n_seeds": 6
+      }
+    },
+    "avg_queries": null
+  }
+}

@@ -1,0 +1,416 @@
+{
+  "C1_published_baseline": {
+    "overall_mean_fnr": 0.0,
+    "overall_std_fnr": 0.0,
+    "n_rows": 6,
+    "n_seeds": 1,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      },
+      "Grammar correction": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 1
+      }
+    },
+    "avg_queries": 100.0
+  },
+  "C2_mw_original_only": {
+    "overall_mean_fnr": 0.0,
+    "overall_std_fnr": 0.0,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "C3_mw_single_paraphrase": {
+    "overall_mean_fnr": 0.008333333333333335,
+    "overall_std_fnr": 0.019174124721184262,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.05000000000000001,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "C4_mw_phi_llm": {
+    "overall_mean_fnr": 0.9533333333333331,
+    "overall_std_fnr": 0.09016325063298172,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.8333333333333334,
+        "std": 0.18448125469362278,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9966666666666667,
+        "std": 0.005773502691896279,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.9233333333333333,
+        "std": 0.04041451884327379,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.9666666666666667,
+        "std": 0.028867513459481322,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "A1_random": {
+    "overall_mean_fnr": 0.29055555555555557,
+    "overall_std_fnr": 0.06448640734314591,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.25333333333333335,
+        "std": 0.04163331998932267,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.34,
+        "std": 0.04358898943540674,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.3466666666666667,
+        "std": 0.08736894948054105,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.24666666666666667,
+        "std": 0.05507570547286102,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.3033333333333333,
+        "std": 0.06658328118479391,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.25333333333333335,
+        "std": 0.03055050463303894,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 100.0
+  },
+  "A2_greedy": {
+    "overall_mean_fnr": 0.9933333333333333,
+    "overall_std_fnr": 0.014950900031928054,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.98,
+        "std": 0.02645751311064593,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.98,
+        "std": 0.020000000000000018,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 1570.0
+  },
+  "A3_epsilon_greedy": {
+    "overall_mean_fnr": 0.9177777777777778,
+    "overall_std_fnr": 0.23130208298839688,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.9833333333333334,
+        "std": 0.02081665999466135,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.68,
+        "std": 0.5542562584220407,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9866666666666667,
+        "std": 0.015275252316519468,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9833333333333334,
+        "std": 0.028867513459481322,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.8733333333333334,
+        "std": 0.16772994167212157,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "A4_multiplicative_weights": {
+    "overall_mean_fnr": 0.9583333333333334,
+    "overall_std_fnr": 0.0900490062655428,
+    "n_rows": 18,
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.8333333333333334,
+        "std": 0.18448125469362278,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.9933333333333333,
+        "std": 0.0057735026918962545,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9566666666666667,
+        "std": 0.06658328118479391,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9966666666666667,
+        "std": 0.0057735026918962545,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.9766666666666666,
+        "std": 0.02081665999466133,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.9933333333333333,
+        "std": 0.011547005383792509,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": 200.0
+  },
+  "T1_mw_mixture_transfer": {
+    "overall_mean_fnr": 0.34666666666666673,
+    "overall_std_fnr": 0.0679985994253523,
+    "n_rows": 15,
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 0.42,
+        "std": 0.06082762530298221,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.3433333333333333,
+        "std": 0.05131601439446886,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.31666666666666665,
+        "std": 0.047258156262526045,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.3066666666666667,
+        "std": 0.05507570547286101,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.3466666666666667,
+        "std": 0.09451631252505216,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T2_argmax_transfer": {
+    "overall_mean_fnr": 0.8126666666666666,
+    "overall_std_fnr": 0.3140397305771236,
+    "n_rows": 15,
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 0.5433333333333333,
+        "std": 0.38695391629150533,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9899999999999999,
+        "std": 0.010000000000000009,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.9700000000000001,
+        "std": 0.030000000000000027,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.5599999999999999,
+        "std": 0.44508426168535775,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T3_mw_fresh_oracle": {
+    "overall_mean_fnr": 0.9413333333333332,
+    "overall_std_fnr": 0.13747034312205395,
+    "n_rows": 15,
+    "n_seeds": 3,
+    "per_task": {
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9866666666666667,
+        "std": 0.023094010767585042,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.87,
+        "std": 0.22516660498395405,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.85,
+        "std": 0.21794494717703367,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  }
+}
