@@ -96,8 +96,10 @@ def plot_T_sweep(data, output_dir: Path):
                label=f'Main result ({MAIN_RESULT_FNR:.3f})')
     
     ax.set_xscale('log')
+    from matplotlib.ticker import NullLocator
     ax.set_xticks(xs)
     ax.set_xticklabels([str(x) for x in xs])
+    ax.xaxis.set_minor_locator(NullLocator())
     ax.set_xlabel(r'MW learning rounds $T$')
     ax.set_ylabel('False Negative Rate')
     ax.set_ylim(0.85, 1.02)
@@ -205,13 +207,28 @@ def plot_K_sweep(data, output_dir: Path):
             break
     
     ax.set_xscale('log')
-    ax.set_xticks(xs)
-    ax.set_xticklabels([str(x) for x in xs])
+    # Only show major ticks at our data points; kill matplotlib's auto log minors
+    from matplotlib.ticker import FixedLocator, NullLocator, FixedFormatter
+    # Merge 20 and 21 into a single label since they visually overlap on log scale
+    tick_positions = []
+    tick_labels = []
+    for x in xs:
+        if x == 21:
+            # Skip separate tick for 21; it's merged into the 20 label
+            continue
+        tick_positions.append(x)
+        if x == 20:
+            tick_labels.append('20/21')
+        else:
+            tick_labels.append(str(x))
+    ax.xaxis.set_major_locator(FixedLocator(tick_positions))
+    ax.xaxis.set_major_formatter(FixedFormatter(tick_labels))
+    ax.xaxis.set_minor_locator(NullLocator())
     ax.set_xlabel(r'Paraphrase pool size $|\Phi_{\mathrm{LLM}}|$')
     ax.set_ylabel('False Negative Rate')
     ax.set_ylim(0.80, 1.02)
     ax.grid(True, alpha=0.3, axis='y')
-    ax.legend(loc='lower right', frameon=True, framealpha=0.95, fontsize=9)
+    ax.legend(loc='lower left', frameon=True, framealpha=0.95, fontsize=9)
     
     plt.tight_layout()
     for ext in ['pdf', 'png']:
