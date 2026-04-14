@@ -1,0 +1,13 @@
+{
+  "detector": "KAD",
+  "fpr": {
+    "Dup. sentence detection": 1.0,
+    "Grammar correction": 0.95,
+    "Spam detection": 0.88,
+    "Nat. lang. inference": 0.98,
+    "Sentiment analysis": 0.95,
+    "Hate detection": 0.93,
+    "Summarization": 0.98
+  },
+  "avg": 0.9528571428571428
+}

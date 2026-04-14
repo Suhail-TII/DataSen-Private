@@ -1,0 +1,17 @@
+{
+  "detector": "EVD",
+  "config": {
+    "num_paraphrases": 20,
+    "mw_rounds": 100,
+    "mw_eta": 0.3,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "data_num": 100
+  },
+  "fnr_mean": 0.6161111111111112,
+  "fnr_std": 0.23860227524404287,
+  "fpr_avg": 0.1871428571428572
+}

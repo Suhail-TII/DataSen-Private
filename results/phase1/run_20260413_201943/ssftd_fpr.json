@@ -1,0 +1,13 @@
+{
+  "detector": "SSFTD",
+  "fpr": {
+    "Dup. sentence detection": 0.96,
+    "Grammar correction": 0.89,
+    "Spam detection": 0.61,
+    "Nat. lang. inference": 0.93,
+    "Sentiment analysis": 0.94,
+    "Hate detection": 0.72,
+    "Summarization": 0.99
+  },
+  "avg": 0.8628571428571429
+}

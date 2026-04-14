@@ -1,0 +1,13 @@
+{
+  "detector": "NLLMD",
+  "fpr": {
+    "Dup. sentence detection": 1.0,
+    "Grammar correction": 1.0,
+    "Spam detection": 1.0,
+    "Nat. lang. inference": 1.0,
+    "Sentiment analysis": 1.0,
+    "Hate detection": 1.0,
+    "Summarization": 1.0
+  },
+  "avg": 1.0
+}

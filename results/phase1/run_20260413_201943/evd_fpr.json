@@ -1,0 +1,13 @@
+{
+  "detector": "EVD",
+  "fpr": {
+    "Dup. sentence detection": 0.16,
+    "Grammar correction": 0.22,
+    "Spam detection": 0.63,
+    "Nat. lang. inference": 0.11,
+    "Sentiment analysis": 0.08,
+    "Hate detection": 0.11,
+    "Summarization": 0.0
+  },
+  "avg": 0.1871428571428572
+}

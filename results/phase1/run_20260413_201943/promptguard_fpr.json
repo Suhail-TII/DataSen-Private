@@ -1,0 +1,13 @@
+{
+  "detector": "PromptGuard",
+  "fpr": {
+    "Dup. sentence detection": 0.88,
+    "Grammar correction": 1.0,
+    "Spam detection": 0.77,
+    "Nat. lang. inference": 0.69,
+    "Sentiment analysis": 0.99,
+    "Hate detection": 0.93,
+    "Summarization": 0.98
+  },
+  "avg": 0.8914285714285715
+}

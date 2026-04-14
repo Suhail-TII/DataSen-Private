@@ -1,0 +1,17 @@
+{
+  "detector": "NLLMD",
+  "config": {
+    "num_paraphrases": 20,
+    "mw_rounds": 100,
+    "mw_eta": 0.3,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "data_num": 100
+  },
+  "fnr_mean": 0.0911111111111111,
+  "fnr_std": 0.20656544010494987,
+  "fpr_avg": 1.0
+}

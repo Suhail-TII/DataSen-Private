@@ -1,0 +1,17 @@
+{
+  "detector": "SSFTD-G",
+  "config": {
+    "num_paraphrases": 20,
+    "mw_rounds": 100,
+    "mw_eta": 0.3,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "data_num": 100
+  },
+  "fnr_mean": 0.7227777777777779,
+  "fnr_std": 0.2697232907903417,
+  "fpr_avg": 0.08571428571428572
+}
