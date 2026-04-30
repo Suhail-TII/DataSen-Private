@@ -1,0 +1,31 @@
+===========================================================================
+GT-SEMANTIC ATTACK — ABLATION STUDY
+===========================================================================
+  Groups       : ['3']
+  Seeds        : [42, 43, 44]
+  Detector     : DataSentinel_Models/detector_large/checkpoint-5000
+  Paraphraser  : meta-llama/Meta-Llama-3.1-8B-Instruct
+  data_num     : 100
+  num_paraphr. : 20
+  mw_rounds    : 100
+  mw_eta       : 0.3
+  Save dir     : results/gt_ablation/transfer_hsol
+  Resume       : False
+===========================================================================
+
+[Setup] Loading data...
+  mrpc: 100 target, 100 inject
+  jfleg: 100 target, 100 inject
+  sms_spam: 100 target, 100 inject
+  rte: 100 target, 100 inject
+  sst2: 100 target, 100 inject
+  hsol: 100 target, 100 inject
+  gigaword: 100 target, 100 inject
+
+[Setup] Loading detector...
+  Loading DataSentinel detector via PI library...
+  Detector loaded.
+
+[Setup] Loading paraphrase model...
+  Loading paraphrase LLM: meta-llama/Meta-Llama-3.1-8B-Instruct
+

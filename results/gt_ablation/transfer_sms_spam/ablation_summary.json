@@ -1,0 +1,122 @@
+{
+  "T1_mw_mixture_transfer": {
+    "overall_mean_fnr": 0.3346666666666667,
+    "overall_std_fnr": 0.04485956923980603,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.34,
+        "std": 0.020000000000000004,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.30666666666666664,
+        "std": 0.037859388972001785,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.3466666666666667,
+        "std": 0.05859465277082314,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.33,
+        "std": 0.045825756949558386,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.35000000000000003,
+        "std": 0.06999999999999999,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T2_argmax_transfer": {
+    "overall_mean_fnr": 0.9506666666666668,
+    "overall_std_fnr": 0.07860086028851872,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.9466666666666667,
+        "std": 0.03214550253664315,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.9966666666666667,
+        "std": 0.005773502691896279,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9899999999999999,
+        "std": 0.010000000000000009,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9433333333333334,
+        "std": 0.0981495457622364,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.8766666666666666,
+        "std": 0.13650396819628854,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T3_mw_fresh_oracle": {
+    "overall_mean_fnr": 0.9666666666666667,
+    "overall_std_fnr": 0.10265522508910709,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.9966666666666667,
+        "std": 0.005773502691896279,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Nat. lang. inference": {
+        "mean": 0.9866666666666667,
+        "std": 0.023094010767585042,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.85,
+        "std": 0.21794494717703367,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  }
+}

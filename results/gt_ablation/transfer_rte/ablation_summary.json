@@ -1,0 +1,122 @@
+{
+  "T1_mw_mixture_transfer": {
+    "overall_mean_fnr": 0.34733333333333327,
+    "overall_std_fnr": 0.0393639912804051,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.35000000000000003,
+        "std": 0.02645751311064589,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 0.33,
+        "std": 0.029999999999999985,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.3566666666666667,
+        "std": 0.030550504633038964,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.3666666666666667,
+        "std": 0.03785938897200182,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.3333333333333333,
+        "std": 0.07371114795831994,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T2_argmax_transfer": {
+    "overall_mean_fnr": 0.9440000000000001,
+    "overall_std_fnr": 0.12540221005115615,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.96,
+        "std": 0.045825756949558365,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 0.9933333333333333,
+        "std": 0.011547005383792509,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.7666666666666666,
+        "std": 0.21733231083604057,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  },
+  "T3_mw_fresh_oracle": {
+    "overall_mean_fnr": 0.9373333333333334,
+    "overall_std_fnr": 0.15447915562887285,
+    "n_rows": 15,
+    "n_tasks": 5,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_seeds": 3,
+    "per_task": {
+      "Dup. sentence detection": {
+        "mean": 0.9966666666666667,
+        "std": 0.005773502691896279,
+        "n_seeds": 3
+      },
+      "Grammar correction": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Hate detection": {
+        "mean": 1.0,
+        "std": 0.0,
+        "n_seeds": 3
+      },
+      "Spam detection": {
+        "mean": 0.84,
+        "std": 0.27712812921102037,
+        "n_seeds": 3
+      },
+      "Summarization": {
+        "mean": 0.85,
+        "std": 0.21794494717703367,
+        "n_seeds": 3
+      }
+    },
+    "avg_queries": null
+  }
+}

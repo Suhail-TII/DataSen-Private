@@ -578,6 +578,10 @@ def update_llm(
         # = gradient ASCENT on J1 (contaminated) + gradient DESCENT on J2 (clean)
         loss = -j1 + beta * j2
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(
+            [p for p in det_model.parameters() if p.requires_grad],
+            max_norm=1.0
+        )
         optimizer.step()
 
         if (step + 1) % 50 == 0 or step == 0:

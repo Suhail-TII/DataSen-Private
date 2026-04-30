@@ -1,0 +1,26 @@
+/var/spool/slurmd/job10726/slurm_script: line 11: cd: /dpc/kuex0037/Open-Prompt-Inspection: No such file or directory
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:05<00:05,  5.33s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.56s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.82s/it]
+You are using the default legacy behaviour of the <class 'transformers.models.llama.tokenization_llama.LlamaTokenizer'>. This is expected, and simply means that the `legacy` (previous) behavior will be used so nothing changes for you. If you want to use the new behaviour, set `legacy=False`. This should only be set if you understand what it means, and thoroughly read the reason why this was added as explained in https://github.com/huggingface/transformers/pull/24565 - if you loaded a llama tokenizer from a GGUF file you can ignore this message
+Traceback (most recent call last):
+  File "<string>", line 11, in <module>
+  File "/dpc/kuex0037/Open-Prompt-Injection/./OpenPromptInjection/apps/DataSentinelDetector.py", line 10, in __init__
+    self.model = QLoraModel(config)
+  File "/dpc/kuex0037/Open-Prompt-Injection/./OpenPromptInjection/models/QLoraModel.py", line 40, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/models/auto/tokenization_auto.py", line 1175, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/tokenization_utils_base.py", line 2113, in from_pretrained
+    return cls._from_pretrained(
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/tokenization_utils_base.py", line 2151, in _from_pretrained
+    slow_tokenizer = (cls.slow_tokenizer_class)._from_pretrained(
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/tokenization_utils_base.py", line 2359, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/models/llama/tokenization_llama.py", line 171, in __init__
+    self.sp_model = self.get_spm_processor(kwargs.pop("from_slow", False))
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/transformers/models/llama/tokenization_llama.py", line 198, in get_spm_processor
+    tokenizer.Load(self.vocab_file)
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/sentencepiece/__init__.py", line 961, in Load
+    return self.LoadFromFile(model_file)
+  File "/home/kunet.ae/100045490/.conda/envs/DataSen/lib/python3.9/site-packages/sentencepiece/__init__.py", line 316, in LoadFromFile
+    return _sentencepiece.SentencePieceProcessor_LoadFromFile(self, arg)
+TypeError: not a string

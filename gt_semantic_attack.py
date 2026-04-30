@@ -326,10 +326,27 @@ def generate_paraphrase_pool(model, tokenizer, device: str,
             break
         
         prompt = rephrase_prompt.format(instruction=instruction, data=data)
-        
-        # Format for LLaMA3-Instruct
-        if "llama" in tokenizer.name_or_path.lower() or "Llama" in tokenizer.name_or_path:
-            formatted = f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n{prompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+
+        # Apply the model's own chat template (works for LLaMA3, Qwen2.5,
+        # Mistral-Instruct, and any instruction-tuned model).
+        if hasattr(tokenizer, "chat_template") and tokenizer.chat_template is not None:
+            messages = [{"role": "user", "content": prompt}]
+            try:
+                formatted = tokenizer.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True,
+                )
+            except Exception:
+                formatted = (
+                    f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>"
+                    f"\n\n{prompt}<|eot_id|>"
+                    f"<|start_header_id|>assistant<|end_header_id|>\n\n"
+                )
+        elif "llama" in tokenizer.name_or_path.lower():
+            formatted = (
+                f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>"
+                f"\n\n{prompt}<|eot_id|>"
+                f"<|start_header_id|>assistant<|end_header_id|>\n\n"
+            )
         else:
             formatted = prompt
         
